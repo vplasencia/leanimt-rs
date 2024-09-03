@@ -1,0 +1,11 @@
+[package]
+name = "leanimt-poseidon-rs"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+light-poseidon = "0.2.0"
+wasm-bindgen = "0.2.93"
+leanimt-rs = { path = "../leanimt-rs" }
+ark-bn254 = "0.4.0"
+ark-ff = "0.4.2"
