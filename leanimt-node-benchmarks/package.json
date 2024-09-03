@@ -1,0 +1,19 @@
+{
+  "name": "leanimt-node-benchmarks",
+  "packageManager": "yarn@4.2.2",
+  "scripts": {
+    "prettier": "prettier -c .",
+    "prettier:write": "prettier -w ."
+  },
+  "devDependencies": {
+    "@types/node": "^22.5.2",
+    "prettier": "^3.3.3",
+    "tinybench": "^2.9.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.5.4"
+  },
+  "dependencies": {
+    "@zk-kit/lean-imt": "^2.1.0",
+    "poseidon-lite": "^0.3.0"
+  }
+}
