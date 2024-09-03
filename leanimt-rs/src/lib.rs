@@ -182,6 +182,22 @@ impl LeanIMT {
             siblings,
         })
     }
+    pub fn verify_proof(
+        proof: &LeanIMTMerkleProof,
+        hash: LeanIMTHashFunction,
+    ) -> Result<bool, &'static str> {
+        let mut node = proof.leaf.clone();
+
+        for (i, sibling) in proof.siblings.iter().enumerate() {
+            if (proof.index >> i) & 1 != 0 {
+                node = hash(vec![sibling.clone(), node]);
+            } else {
+                node = hash(vec![node, sibling.clone()]);
+            }
+        }
+
+        Ok(proof.root == node)
+    }
 }
 #[cfg(test)]
 mod tests {
@@ -278,7 +294,7 @@ mod tests {
 
     #[test]
     fn test_generate_proof() {
-        let tree: LeanIMT = LeanIMT::new(
+        let leanimt: LeanIMT = LeanIMT::new(
             hash_function,
             vec![
                 "1".to_string(),
@@ -288,7 +304,7 @@ mod tests {
             ],
         )
         .unwrap();
-        let proof = tree.generate_proof(2).unwrap();
+        let proof = leanimt.generate_proof(2).unwrap();
 
         assert_eq!(
             proof.root,
@@ -303,5 +319,21 @@ mod tests {
             proof.siblings,
             vec!["4", &hash_function(vec!["1".to_string(), "2".to_string()])]
         );
+    }
+
+    #[test]
+    fn test_verify_proof() {
+        let leanimt: LeanIMT = LeanIMT::new(
+            hash_function,
+            vec![
+                "1".to_string(),
+                "2".to_string(),
+                "3".to_string(),
+                "4".to_string(),
+            ],
+        )
+        .unwrap();
+        let proof = leanimt.generate_proof(2).unwrap(); // Generate proof for the third leaf (value 3)
+        assert!(LeanIMT::verify_proof(&proof, hash_function).unwrap());
     }
 }
