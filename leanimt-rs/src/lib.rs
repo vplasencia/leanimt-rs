@@ -6,6 +6,13 @@ pub struct LeanIMT {
 pub type LeanIMTNode = String;
 pub type LeanIMTHashFunction = fn(Vec<LeanIMTNode>) -> LeanIMTNode;
 
+pub struct LeanIMTMerkleProof {
+    pub root: LeanIMTNode,
+    pub leaf: LeanIMTNode,
+    pub index: usize,
+    pub siblings: Vec<LeanIMTNode>,
+}
+
 impl LeanIMT {
     pub fn new(
         hash: LeanIMTHashFunction,
@@ -142,6 +149,39 @@ impl LeanIMT {
 
         Ok(())
     }
+
+    pub fn generate_proof(&self, mut index: usize) -> Result<LeanIMTMerkleProof, &'static str> {
+        if index >= self.size() {
+            panic!("The leaf at index '{}' does not exist in this tree", index);
+        }
+
+        let leaf = self.leaves()[index].clone();
+        let mut siblings = Vec::new();
+        let mut path = Vec::new();
+
+        for level in 0..self.depth() {
+            let is_right_node = index & 1 != 0;
+            let sibling_index = if is_right_node { index - 1 } else { index + 1 };
+            if let Some(sibling) = self.nodes[level].get(sibling_index).cloned() {
+                path.push(is_right_node);
+                siblings.push(sibling);
+            }
+
+            index >>= 1;
+        }
+
+        let final_index = path
+            .iter()
+            .rev()
+            .fold(0, |acc, &is_right| (acc << 1) | is_right as usize);
+
+        Ok(LeanIMTMerkleProof {
+            root: self.nodes[self.depth()][0].clone(),
+            leaf,
+            index: final_index,
+            siblings,
+        })
+    }
 }
 #[cfg(test)]
 mod tests {
@@ -233,6 +273,35 @@ mod tests {
                 hash_function(vec!["1".to_string(), "5".to_string()]),
                 hash_function(vec!["3".to_string(), "4".to_string()])
             ])
+        );
+    }
+
+    #[test]
+    fn test_generate_proof() {
+        let tree: LeanIMT = LeanIMT::new(
+            hash_function,
+            vec![
+                "1".to_string(),
+                "2".to_string(),
+                "3".to_string(),
+                "4".to_string(),
+            ],
+        )
+        .unwrap();
+        let proof = tree.generate_proof(2).unwrap();
+
+        assert_eq!(
+            proof.root,
+            hash_function(vec![
+                hash_function(vec!["1".to_string(), "2".to_string()]),
+                hash_function(vec!["3".to_string(), "4".to_string()])
+            ])
+        );
+        assert_eq!(proof.leaf, "3");
+        assert_eq!(proof.index, 2);
+        assert_eq!(
+            proof.siblings,
+            vec!["4", &hash_function(vec!["1".to_string(), "2".to_string()])]
         );
     }
 }
