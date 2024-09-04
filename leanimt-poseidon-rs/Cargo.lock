@@ -227,6 +227,7 @@ dependencies = [
  "ark-ff",
  "leanimt-rs",
  "light-poseidon",
+ "num-bigint",
  "wasm-bindgen",
 ]
 

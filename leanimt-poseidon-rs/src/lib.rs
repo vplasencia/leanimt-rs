@@ -1,14 +1,20 @@
 use ark_bn254::Fr;
-use ark_ff::PrimeField;
 use leanimt_rs::*;
 use light_poseidon::{Poseidon, PoseidonHasher};
+use num_bigint::BigUint;
 use wasm_bindgen::prelude::*;
+
+fn string_to_biguint(num_str: &str) -> BigUint {
+    num_str
+        .parse()
+        .expect("Failed to parse the string into BigUint")
+}
 
 fn poseidon_function(nodes: Vec<String>) -> String {
     let mut poseidon = Poseidon::<Fr>::new_circom(2).unwrap();
 
-    let input1 = Fr::from_be_bytes_mod_order(nodes[0].as_bytes());
-    let input2 = Fr::from_be_bytes_mod_order(nodes[1].as_bytes());
+    let input1 = Fr::from(string_to_biguint(&nodes[0]));
+    let input2 = Fr::from(string_to_biguint(&nodes[1]));
 
     let hash = poseidon.hash(&[input1, input2]).unwrap();
 
@@ -87,14 +93,22 @@ impl LeanIMTPoseidon {
     }
 
     pub fn verify_proof(proof: Vec<String>) -> bool {
+        let siblings: Vec<String> = if !proof[3].is_empty() {
+            // If proof[3] is not empty, split it by commas and convert it to Vec<String>
+            String::from(proof[3].clone())
+                .split(',')
+                .map(|s| s.to_string())
+                .collect()
+        } else {
+            // If proof[3] is empty, return an empty Vec<String>
+            Vec::new()
+        };
+
         let temp = LeanIMTMerkleProof {
             root: proof[0].clone(),
             leaf: proof[1].clone(),
             index: proof[2].parse().unwrap(),
-            siblings: String::from(proof[3].clone())
-                .split(",")
-                .map(|s| s.to_string())
-                .collect(),
+            siblings,
         };
         return LeanIMT::verify_proof(&temp, poseidon_function).unwrap();
     }
@@ -157,6 +171,14 @@ mod tests {
             "4".to_string(),
         ]);
         let proof = tree.generate_proof(2);
+
+        assert!(LeanIMTPoseidon::verify_proof(proof));
+    }
+
+    #[test]
+    fn test_verify_proof_tree_size_one() {
+        let mut tree = LeanIMTPoseidon::new(vec!["1".to_string()]);
+        let proof = tree.generate_proof(0);
 
         assert!(LeanIMTPoseidon::verify_proof(proof));
     }
