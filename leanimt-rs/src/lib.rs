@@ -66,7 +66,7 @@ impl LeanIMT {
             if self.nodes[level].len() <= index {
                 self.nodes[level].push(node.clone());
             } else {
-                self.nodes[level][index] = node.clone();
+                self.nodes[level][index].clone_from(&node);
             }
 
             if index & 1 != 0 {
@@ -129,15 +129,13 @@ impl LeanIMT {
         let mut node = new_leaf;
 
         for level in 0..self.depth() {
-            self.nodes[level][index] = node.clone();
+            self.nodes[level][index].clone_from(&node);
 
             if index & 1 != 0 {
                 let sibling = self.nodes[level][index - 1].clone();
                 node = (self.hash)(vec![sibling, node]);
-            } else {
-                if let Some(sibling) = self.nodes[level].get(index + 1).cloned() {
-                    node = (self.hash)(vec![node, sibling]);
-                }
+            } else if let Some(sibling) = self.nodes[level].get(index + 1).cloned() {
+                node = (self.hash)(vec![node, sibling]);
             }
 
             index >>= 1;

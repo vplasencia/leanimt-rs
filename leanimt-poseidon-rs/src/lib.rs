@@ -18,7 +18,7 @@ fn poseidon_function(nodes: Vec<String>) -> String {
 
     let hash = poseidon.hash(&[input1, input2]).unwrap();
 
-    return hash.to_string();
+    hash.to_string()
 }
 
 #[wasm_bindgen]
@@ -30,11 +30,9 @@ pub struct LeanIMTPoseidon {
 impl LeanIMTPoseidon {
     #[wasm_bindgen(constructor)]
     pub fn new(leaves: Vec<LeanIMTNode>) -> LeanIMTPoseidon {
-        let imt_poseidon = LeanIMTPoseidon {
+        LeanIMTPoseidon {
             leanimt: LeanIMT::new(poseidon_function, leaves).unwrap(),
-        };
-
-        return imt_poseidon;
+        }
     }
 
     pub fn root(&mut self) -> Option<LeanIMTNode> {
@@ -61,21 +59,21 @@ impl LeanIMTPoseidon {
         self.leanimt.has(&leaf)
     }
 
-    pub fn insert(&mut self, leaf: LeanIMTNode) -> () {
+    pub fn insert(&mut self, leaf: LeanIMTNode) {
         match self.leanimt.insert(leaf) {
             Ok(()) => (),
             Err(_) => panic!("Failed to insert a the leaf"),
         }
     }
 
-    pub fn insert_many(&mut self, leaves: Vec<LeanIMTNode>) -> () {
+    pub fn insert_many(&mut self, leaves: Vec<LeanIMTNode>) {
         match self.leanimt.insert_many(leaves) {
             Ok(()) => (),
             Err(_) => panic!("Failed to insert a the leaf"),
         }
     }
 
-    pub fn update(&mut self, index: usize, new_leaf: LeanIMTNode) -> () {
+    pub fn update(&mut self, index: usize, new_leaf: LeanIMTNode) {
         match self.leanimt.update(index, new_leaf) {
             Ok(()) => (),
             Err(_) => panic!("Failed to update the leaf"),
@@ -84,21 +82,18 @@ impl LeanIMTPoseidon {
 
     pub fn generate_proof(&mut self, index: usize) -> Vec<String> {
         let proof = self.leanimt.generate_proof(index);
-        return vec![
+        vec![
             proof.root,
             proof.leaf,
             proof.index.to_string(),
             proof.siblings.join(","),
-        ];
+        ]
     }
 
     pub fn verify_proof(proof: Vec<String>) -> bool {
         let siblings: Vec<String> = if !proof[3].is_empty() {
             // If proof[3] is not empty, split it by commas and convert it to Vec<String>
-            String::from(proof[3].clone())
-                .split(',')
-                .map(|s| s.to_string())
-                .collect()
+            proof[3].clone().split(',').map(|s| s.to_string()).collect()
         } else {
             // If proof[3] is empty, return an empty Vec<String>
             Vec::new()
@@ -110,7 +105,7 @@ impl LeanIMTPoseidon {
             index: proof[2].parse().unwrap(),
             siblings,
         };
-        return LeanIMT::verify_proof(&temp, poseidon_function).unwrap();
+        LeanIMT::verify_proof(&temp, poseidon_function).unwrap()
     }
 }
 
