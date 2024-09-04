@@ -75,6 +75,29 @@ impl LeanIMTPoseidon {
             Err(_) => panic!("Failed to update the leaf"),
         }
     }
+
+    pub fn generate_proof(&mut self, index: usize) -> Vec<String> {
+        let proof = self.leanimt.generate_proof(index);
+        return vec![
+            proof.root,
+            proof.leaf,
+            proof.index.to_string(),
+            proof.siblings.join(","),
+        ];
+    }
+
+    pub fn verify_proof(proof: Vec<String>) -> bool {
+        let temp = LeanIMTMerkleProof {
+            root: proof[0].clone(),
+            leaf: proof[1].clone(),
+            index: proof[2].parse().unwrap(),
+            siblings: String::from(proof[3].clone())
+                .split(",")
+                .map(|s| s.to_string())
+                .collect(),
+        };
+        return LeanIMT::verify_proof(&temp, poseidon_function).unwrap();
+    }
 }
 
 #[cfg(test)]
@@ -93,5 +116,48 @@ mod tests {
         println!("{result}");
 
         assert_eq!(result, result);
+    }
+
+    #[test]
+    fn test_generate_proof() {
+        let mut tree = LeanIMTPoseidon::new(vec![
+            "1".to_string(),
+            "2".to_string(),
+            "3".to_string(),
+            "4".to_string(),
+        ]);
+        let proof = tree.generate_proof(2);
+
+        println!("{:?}", proof);
+
+        assert_eq!(
+            proof[0],
+            poseidon_function(vec![
+                poseidon_function(vec!["1".to_string(), "2".to_string()]),
+                poseidon_function(vec!["3".to_string(), "4".to_string()])
+            ])
+        );
+        assert_eq!(proof[1], "3".to_string());
+        assert_eq!(proof[2], "2");
+        assert_eq!(
+            proof[3],
+            vec![
+                "4",
+                &poseidon_function(vec!["1".to_string(), "2".to_string()])
+            ]
+            .join(",")
+        );
+    }
+    #[test]
+    fn test_verify_proof() {
+        let mut tree = LeanIMTPoseidon::new(vec![
+            "1".to_string(),
+            "2".to_string(),
+            "3".to_string(),
+            "4".to_string(),
+        ]);
+        let proof = tree.generate_proof(2);
+
+        assert!(LeanIMTPoseidon::verify_proof(proof));
     }
 }

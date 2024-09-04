@@ -150,7 +150,7 @@ impl LeanIMT {
         Ok(())
     }
 
-    pub fn generate_proof(&self, mut index: usize) -> Result<LeanIMTMerkleProof, &'static str> {
+    pub fn generate_proof(&self, mut index: usize) -> LeanIMTMerkleProof {
         if index >= self.size() {
             panic!("The leaf at index '{}' does not exist in this tree", index);
         }
@@ -175,12 +175,12 @@ impl LeanIMT {
             .rev()
             .fold(0, |acc, &is_right| (acc << 1) | is_right as usize);
 
-        Ok(LeanIMTMerkleProof {
+        LeanIMTMerkleProof {
             root: self.nodes[self.depth()][0].clone(),
             leaf,
             index: final_index,
             siblings,
-        })
+        }
     }
     pub fn verify_proof(
         proof: &LeanIMTMerkleProof,
@@ -304,7 +304,7 @@ mod tests {
             ],
         )
         .unwrap();
-        let proof = leanimt.generate_proof(2).unwrap();
+        let proof = leanimt.generate_proof(2);
 
         assert_eq!(
             proof.root,
@@ -333,7 +333,7 @@ mod tests {
             ],
         )
         .unwrap();
-        let proof = leanimt.generate_proof(2).unwrap(); // Generate proof for the third leaf (value 3)
+        let proof = leanimt.generate_proof(2); // Generate proof for the third leaf (value 3)
         assert!(LeanIMT::verify_proof(&proof, hash_function).unwrap());
     }
 }

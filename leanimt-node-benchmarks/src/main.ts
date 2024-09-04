@@ -1,5 +1,5 @@
 import { Bench, Task } from "tinybench"
-import { LeanIMT } from "@zk-kit/lean-imt"
+import { LeanIMT, LeanIMTMerkleProof } from "@zk-kit/lean-imt"
 import { poseidon2 } from "poseidon-lite"
 
 import * as wasm from "../../leanimt-poseidon-rs/pkg/leanimt_poseidon_rs"
@@ -31,6 +31,10 @@ async function main() {
   let leanIMTWasm: any
 
   let index: number
+
+  let proofLeanIMT: LeanIMTMerkleProof
+
+  let proofLeanIMTWasm: string[]
 
   // Members to insert in when running the inserMany function
   let membersLeanIMT: bigint[]
@@ -117,6 +121,68 @@ async function main() {
         beforeEach: () => {
           leanIMTWasm.insert("1")
           index = Math.floor(leanIMTWasm.size() / 2)
+        }
+      }
+    )
+    .add(
+      "LeanIMT - GenerateProof",
+      async () => {
+        leanIMT.generateProof(index)
+      },
+      {
+        beforeAll: () => {
+          leanIMT = new LeanIMT(leanIMTHash)
+        },
+        beforeEach: () => {
+          leanIMT.insert(1n)
+          index = Math.floor(leanIMT.size / 2)
+        }
+      }
+    )
+    .add(
+      "LeanIMTWasm - GenerateProof",
+      async () => {
+        leanIMTWasm.generate_proof(index)
+      },
+      {
+        beforeAll: () => {
+          leanIMTWasm = new wasm.LeanIMTPoseidon([])
+        },
+        beforeEach: () => {
+          leanIMTWasm.insert("1")
+          index = Math.floor(leanIMTWasm.size() / 2)
+        }
+      }
+    )
+    .add(
+      "LeanIMT - VerifyProof",
+      async () => {
+        leanIMT.verifyProof(proofLeanIMT)
+      },
+      {
+        beforeAll: () => {
+          leanIMT = new LeanIMT(leanIMTHash)
+        },
+        beforeEach: () => {
+          leanIMT.insert(1n)
+          index = Math.floor(leanIMT.size / 2)
+          proofLeanIMT = leanIMT.generateProof(index)
+        }
+      }
+    )
+    .add(
+      "LeanIMTWasm - VerifyProof",
+      async () => {
+        wasm.LeanIMTPoseidon.verify_proof(proofLeanIMTWasm)
+      },
+      {
+        beforeAll: () => {
+          leanIMTWasm = new wasm.LeanIMTPoseidon([])
+        },
+        beforeEach: () => {
+          leanIMTWasm.insert("1")
+          index = Math.floor(leanIMTWasm.size() / 2)
+          proofLeanIMTWasm = leanIMTWasm.generate_proof(index)
         }
       }
     )
