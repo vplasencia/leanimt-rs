@@ -40,7 +40,7 @@ export default function Browser() {
               type="number"
               id="number-input"
               aria-describedby="helper-text-explanation"
-              className="border border-gray-300 text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 block p-2.5"
+              className="border border-gray-300 text-sm rounded-md focus:ring-indigo-500 focus:border-indigo-500 block p-2.5"
               placeholder="1234"
               defaultValue={100}
               min={0}
@@ -51,7 +51,7 @@ export default function Browser() {
 
           <button
             onClick={getTableInfo}
-            className="mt-5 rounded-md bg-blue-700 py-2 px-5 font-semibold hover:bg-blue-600 transition-colors duration-150 text-white"
+            className="mt-5 rounded-md bg-indigo-700 py-2 px-5 font-semibold hover:bg-indigo-600 transition-colors duration-150 text-white"
           >
             Generate Benchmarks
           </button>
@@ -61,7 +61,7 @@ export default function Browser() {
         {tableInfo ? (
           <div className="flex justify-center items-center mb-10">
             <button
-              className="max-w-fit rounded-md bg-blue-700 py-2 px-5 font-semibold hover:bg-blue-600 transition-colors duration-150 text-white"
+              className="max-w-fit rounded-md bg-indigo-700 py-2 px-5 font-semibold hover:bg-indigo-600 transition-colors duration-150 text-white"
               onClick={downloadData}
             >
               Download Benchmarks

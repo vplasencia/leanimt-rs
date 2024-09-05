@@ -1,5 +1,3 @@
-import { useState } from "react"
-
 import TableNode from "./components/TableNode"
 
 import TableBrowser from "./components/TableBrowser"
