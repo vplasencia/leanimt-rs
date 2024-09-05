@@ -4,7 +4,7 @@ import { generateBenchmarks } from "./utils/generate-benchmarks"
 
 import Table from "./components/Table"
 
-import { Link } from "react-router-dom";
+import { Link } from "react-router-dom"
 
 export default function Browser() {
   const [tableInfo, setTableInfo] = useState()
