@@ -1,38 +1,89 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
 
-import { generateBenchmarks } from "./utils/generate-benchmarks"
+import FunctionsBrowser from "./assets/data/functions-browser.json"
+import FunctionsNode from "./assets/data/functions-node.json"
 
 import Table from "./components/Table"
 
 import { Link } from "react-router-dom"
 
-export default function Browser() {
-  const [tableInfo, setTableInfo] = useState()
+import LineChart from "./components/LineChart"
 
-  // useEffect(()=> {
-  //   const wasmFunction = async () => {
-  //     await generateBenchmarks()
+export default function Browser() {
+  // const [tableInfo, setTableInfo] = useState(FunctionsBrowser)
+  const [functionsBrowser, setFunctionsBrowser] = useState({
+    options: {
+      chart: {
+        id: "id"
+      },
+      xaxis: {
+        categories: [0]
+      }
+    },
+    series: [
+      {
+        name: "series",
+        data: [0]
+      }
+    ]
+  })
+
+  // useEffect(() => {
+  //   const functionsBrowserData = {
+  //     options: {
+  //       chart: {
+  //         id: "basic-bar"
+  //       },
+  //       xaxis: {
+  //         categories: [1]
+  //       }
+  //     },
+  //     series: [
+  //       {
+  //         name: "series-1",
+  //         data: [1]
+  //       }
+  //     ]
   //   }
-  //   wasmFunction()
+  //   setFunctionsBrowser(temp)
   // }, [])
 
-  const renderTable = async () => {
-    const benchmarksInfo = await generateBenchmarks()
-    setTableInfo(benchmarksInfo as any)
+  if (!functionsBrowser) {
+    return <div>Loading...</div>
   }
 
   return (
     <div>
-      <button onClick={renderTable}>Generate Benchmarks</button>
-      <Link to="/benchmarks"></Link>
-      <h1 className="text-3xl font-bold underline">Hello world!</h1>
-      {tableInfo ? (
+      <Link to="/browser">Browser Benchmarks</Link>
+      <div className="flex flex-col justify-center items-center my-10">
+        <div>Node.js</div>
         <div className="flex justify-center items-center my-5">
-          <Table data={tableInfo} />
+          <Table data={FunctionsBrowser} />
         </div>
-      ) : (
-        <></>
-      )}
+      </div>
+      <div className="flex flex-col justify-center items-center my-10">
+        <div>Browser</div>
+        <div className="flex justify-center items-center my-5">
+          <Table data={FunctionsNode} />
+        </div>
+      </div>
+      <LineChart
+        options={{
+          chart: {
+            id: "basic-bar"
+          },
+          xaxis: {
+            categories: [1991, 1992, 1993, 1994, 1995, 1996, 1997, 1998]
+          }
+        }}
+        series={[
+          {
+            name: "series-1",
+            data: [30, 40, 45, 50, 49, 60, 70, 91]
+          }
+        ]}
+        key={"basic-bar"}
+      />
     </div>
   )
 }
