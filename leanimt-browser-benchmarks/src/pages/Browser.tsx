@@ -6,9 +6,10 @@ import Table from "../components/Table"
 
 export default function Browser() {
   const [tableInfo, setTableInfo] = useState()
+  const [samples, setSamples] = useState(100)
 
-  const renderTable = async () => {
-    const benchmarksInfo = await generateBenchmarks()
+  const getTableInfo = async () => {
+    const benchmarksInfo = await generateBenchmarks(samples)
     setTableInfo(benchmarksInfo as any)
   }
 
@@ -32,12 +33,26 @@ export default function Browser() {
           Generate the browser benchmarks for the LeanIMT in TypeScript and the
           LeanIMT WebAssembly (Wasm) compiled from the Rust implementation.
         </div>
-        <button
-          onClick={renderTable}
-          className="mt-5 rounded-md bg-blue-700 py-2 px-5 font-semibold hover:bg-blue-600 transition-colors duration-150 text-white"
-        >
-          Generate Benchmarks
-        </button>
+        <div className="w-fit mt-5 flex flex-col justify-center items-center">
+          <input
+            type="number"
+            id="number-input"
+            aria-describedby="helper-text-explanation"
+            className="border border-gray-300 text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 block p-2.5"
+            placeholder="1234"
+            defaultValue={100}
+            min={0}
+            required
+            onChange={(e) => setSamples(parseInt(e.target.value))}
+          />
+
+          <button
+            onClick={getTableInfo}
+            className="mt-5 rounded-md bg-blue-700 py-2 px-5 font-semibold hover:bg-blue-600 transition-colors duration-150 text-white"
+          >
+            Generate Benchmarks
+          </button>
+        </div>
       </div>
       <div>
         {tableInfo ? (
