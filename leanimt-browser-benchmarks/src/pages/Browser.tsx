@@ -1,10 +1,8 @@
 import { useState } from "react"
 
-import { generateBenchmarks } from "./utils/generate-benchmarks"
+import { generateBenchmarks } from "../utils/generate-benchmarks"
 
-import Table from "./components/Table"
-
-import { Link } from "react-router-dom";
+import Table from "../components/Table"
 
 export default function Browser() {
   const [tableInfo, setTableInfo] = useState()
@@ -24,7 +22,6 @@ export default function Browser() {
   return (
     <div>
       <button onClick={renderTable}>Generate Benchmarks</button>
-      <Link to="/benchmarks"></Link>
       <h1 className="text-3xl font-bold underline">Hello world!</h1>
       {tableInfo ? (
         <div className="flex justify-center items-center my-5">
