@@ -12,6 +12,19 @@ export default function Browser() {
     setTableInfo(benchmarksInfo as any)
   }
 
+  const downloadData = async () => {
+    const filename = "functions-browser"
+
+    const jsonStr = JSON.stringify(tableInfo, null, 2)
+    const dataUri = `data:text/json;charset=utf-8,${encodeURIComponent(jsonStr)}`
+    const link = document.createElement("a")
+    link.href = dataUri
+    link.download = `${filename}.json`
+    document.body.appendChild(link)
+    link.click()
+    document.body.removeChild(link)
+  }
+
   return (
     <div>
       <div className="flex flex-col justify-center items-center my-10">
@@ -25,6 +38,20 @@ export default function Browser() {
         >
           Generate Benchmarks
         </button>
+      </div>
+      <div>
+        {tableInfo ? (
+          <div className="flex justify-center items-center mb-10">
+            <button
+              className="max-w-fit rounded-md bg-blue-700 py-2 px-5 font-semibold hover:bg-blue-600 transition-colors duration-150 text-white"
+              onClick={downloadData}
+            >
+              Download Benchmarks
+            </button>
+          </div>
+        ) : (
+          <></>
+        )}
       </div>
       <div>
         {tableInfo ? (
