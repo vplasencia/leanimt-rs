@@ -20,7 +20,6 @@ const generateTable = (task: Task) => {
 }
 
 export async function generateBenchmarks(samples: number) {
-  
   const bench = new Bench({ time: 0, iterations: samples })
 
   const leanIMTHash = (a: bigint, b: bigint) => poseidon2([a, b])

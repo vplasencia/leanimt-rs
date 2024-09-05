@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom"
-import ViewSourceCode from "./ViewSourceCode";
+import ViewSourceCode from "./ViewSourceCode"
 
 export default function Header() {
   return (
@@ -11,9 +11,11 @@ export default function Header() {
         JS x Rust x WASM
       </Link>
       <div className="flex space-x-3">
-      <Link to="/about" className="text-indigo-500 hover:underline">About</Link>
-      <ViewSourceCode />
+        <Link to="/about" className="text-indigo-500 hover:underline">
+          About
+        </Link>
+        <ViewSourceCode />
       </div>
     </header>
-  );
+  )
 }
