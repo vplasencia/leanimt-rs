@@ -224,7 +224,9 @@ export async function generateBenchmarks() {
     }
   })
 
-  console.table(table)
+  // console.table(table)
 
   // console.log(bench.results)
+
+  return table
 }
