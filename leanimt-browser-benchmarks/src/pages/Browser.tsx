@@ -34,17 +34,20 @@ export default function Browser() {
           LeanIMT WebAssembly (Wasm) compiled from the Rust implementation.
         </div>
         <div className="w-fit mt-5 flex flex-col justify-center items-center">
-          <input
-            type="number"
-            id="number-input"
-            aria-describedby="helper-text-explanation"
-            className="border border-gray-300 text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 block p-2.5"
-            placeholder="1234"
-            defaultValue={100}
-            min={0}
-            required
-            onChange={(e) => setSamples(parseInt(e.target.value))}
-          />
+          <div>
+            <div>Samples</div>
+            <input
+              type="number"
+              id="number-input"
+              aria-describedby="helper-text-explanation"
+              className="border border-gray-300 text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 block p-2.5"
+              placeholder="1234"
+              defaultValue={100}
+              min={0}
+              required
+              onChange={(e) => setSamples(parseInt(e.target.value))}
+            />
+          </div>
 
           <button
             onClick={getTableInfo}
