@@ -9,6 +9,8 @@ import { Link } from "react-router-dom"
 
 import LineChart from "./components/LineChart"
 
+import Insert from "./assets/data/insert.json"
+
 export default function Browser() {
   // const [tableInfo, setTableInfo] = useState(FunctionsBrowser)
   const [functionsBrowser, setFunctionsBrowser] = useState({
@@ -67,23 +69,52 @@ export default function Browser() {
           <Table data={FunctionsNode} />
         </div>
       </div>
-      <LineChart
-        options={{
-          chart: {
-            id: "basic-bar"
-          },
-          xaxis: {
-            categories: [1991, 1992, 1993, 1994, 1995, 1996, 1997, 1998]
-          }
-        }}
-        series={[
-          {
-            name: "series-1",
-            data: [30, 40, 45, 50, 49, 60, 70, 91]
-          }
-        ]}
-        key={"basic-bar"}
-      />
+      <div className="flex flex-col justify-center items-center my-10">
+        <LineChart
+          series={[
+            {
+              name: "IMT",
+              data: Insert[0].samples
+            },
+            {
+              name: "LeanIMT",
+              data: Insert[1].samples
+            }
+          ]}
+          options={{
+            chart: {
+              id: "line-insert"
+            },
+            xaxis: {
+              categories: Array.from({ length: 100 }, (_, i) => i + 1),
+              title: {
+                text: "Members"
+              },
+              labels: {
+                show: true,
+                rotate: 0,
+                rotateAlways: true,
+                hideOverlappingLabels: true,
+                trim: false
+              },
+              tickAmount: 5
+            },
+            yaxis: [
+              {
+                title: {
+                  text: "Time (ms)"
+                },
+                labels: {
+                  formatter: function (val: number) {
+                    return val.toFixed(2)
+                  }
+                }
+              }
+            ]
+          }}
+          key={"basic-bar"}
+        />
+      </div>
     </div>
   )
 }
