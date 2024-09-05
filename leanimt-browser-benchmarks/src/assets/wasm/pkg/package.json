@@ -1,0 +1,15 @@
+{
+  "name": "leanimt-poseidon-rs",
+  "type": "module",
+  "version": "0.1.0",
+  "files": [
+    "leanimt_poseidon_rs_bg.wasm",
+    "leanimt_poseidon_rs.js",
+    "leanimt_poseidon_rs.d.ts"
+  ],
+  "main": "leanimt_poseidon_rs.js",
+  "types": "leanimt_poseidon_rs.d.ts",
+  "sideEffects": [
+    "./snippets/*"
+  ]
+}
