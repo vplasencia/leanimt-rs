@@ -39,14 +39,14 @@ export default function Browser() {
             the LeanIMT WebAssembly (Wasm) compiled from the Rust
             implementation.
           </div>
-          <div className="w-fit mt-5 flex flex-col justify-center items-center">
-            <div>
+          <div className="mt-5 flex flex-col justify-center items-center">
+            <div className="flex flex-col space-y-1">
               <div>Samples</div>
               <input
                 type="number"
                 id="number-input"
                 aria-describedby="helper-text-explanation"
-                className="border border-gray-300 text-sm rounded-md focus:ring-indigo-500 focus:border-indigo-500 block p-2.5"
+                className="w-52 border border-gray-300 text-sm rounded-md focus:ring-indigo-500 focus:border-indigo-500 block p-2.5"
                 placeholder="1234"
                 defaultValue={100}
                 min={0}
@@ -57,7 +57,7 @@ export default function Browser() {
 
             <button
               onClick={getTableInfo}
-              className="mt-5 rounded-md bg-indigo-700 py-2 px-5 font-semibold hover:bg-indigo-600 transition-colors duration-150 text-white"
+              className="w-full mt-5 rounded-md bg-indigo-700 py-3 px-5 font-semibold hover:bg-indigo-600 transition-colors duration-150 text-white"
             >
               Generate Benchmarks
             </button>
@@ -73,7 +73,7 @@ export default function Browser() {
             <div>
               <div className="flex justify-center items-center mb-10">
                 <button
-                  className="max-w-fit rounded-md bg-indigo-700 py-2 px-5 font-semibold hover:bg-indigo-600 transition-colors duration-150 text-white"
+                  className="max-w-fit rounded-md bg-indigo-700 py-3 px-5 font-semibold hover:bg-indigo-600 transition-colors duration-150 text-white"
                   onClick={downloadData}
                 >
                   Download Benchmarks
