@@ -6,6 +6,16 @@ This research and development can serve as a reference for teams looking to impr
 
 The LeanIMT is the data structure used in [Semaphore v4](https://docs.semaphore.pse.dev/).
 
+## Created Projects
+
+- [LeanIMT in Rust](./leanimt-rs)
+
+- [LeanIMT + Poseidon in Rust](./leanimt-poseidon-rs)
+
+- [Benchmarks LeanIMT JS and WASM in Node.js](./leanimt-node-benchmarks)
+
+- [Benchmarks LeanIMT JS and WASM in Browser](./leanimt-browser-benchmarks/)
+
 ## Steps to generate the results
 
 #### 1. Implement the LeanIMT in Rust
@@ -14,7 +24,7 @@ The first step was to implement the LeanIMT in Rust, as no prior implementation 
 
 The [LeanIMT TypeScript](https://github.com/privacy-scaling-explorations/zk-kit/tree/main/packages/lean-imt) implementation was used as a reference.
 
-Code: [LeanIMT in Rust](./leanimt-rs).
+Code: [LeanIMT in Rust](./leanimt-rs)
 
 #### 2. Implement the LeanIMT with the Poseidon hash function in Rust
 
