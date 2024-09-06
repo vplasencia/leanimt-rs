@@ -6,6 +6,8 @@ import * as wasm from "../wasm/pkg/leanimt_poseidon_rs"
 
 import { saveInfoJSON } from "./utils/save-info"
 
+import { downsampleData } from "./utils/downsample-data"
+
 const createDataToSave = (bench: Bench) => {
   const result = bench.tasks.map((task, i) => {
     if (task === undefined || task.result === undefined) return "NaN"
@@ -30,6 +32,15 @@ const createDataToSave = (bench: Bench) => {
       }
     }
 
+    // Downsample data for better visualization
+    const downsampleRate = 300
+
+    let x = Array.from({ length: task.result.samples.length }, (_, i) => i + 1)
+    let y = task.result.samples
+
+    x = downsampleData(x, downsampleRate)
+    y = downsampleData(y, downsampleRate)
+
     return {
       Function: task.name,
       "ops/sec": task.result.error
@@ -40,7 +51,8 @@ const createDataToSave = (bench: Bench) => {
         : task.result.mean.toFixed(5),
       Samples: task.result.error ? "NaN" : task.result.samples.length,
       "Relative to IMT": text,
-      ...task.result
+      xaxis: x,
+      yaxis: y
     }
   })
 
@@ -63,7 +75,7 @@ const generateTable = (task: Task) => {
 }
 
 async function main() {
-  const samples = 100
+  const samples = 10000
 
   const bench = new Bench({ time: 0, iterations: samples })
 

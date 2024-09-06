@@ -1,4 +1,4 @@
-import Insert from "../assets/data/insert.json"
+import Insert from "../assets/data/insert-node.json"
 
 import LineChart from "./LineChart"
 
@@ -8,20 +8,21 @@ export default function InsertLineChart() {
       <LineChart
         series={[
           {
-            name: "IMT",
-            data: Insert[0].samples
+            name: "LeanIMT",
+            data: Insert[0].yaxis
           },
           {
-            name: "LeanIMT",
-            data: Insert[1].samples
+            name: "LeanIMTWasm",
+            data: Insert[1].yaxis
           }
         ]}
         options={{
           chart: {
             id: "line-insert"
           },
+          colors: ["#0ea5e9", "#a855f7"],
           xaxis: {
-            categories: Array.from({ length: 100 }, (_, i) => i + 1),
+            categories: Insert[0].xaxis,
             title: {
               text: "Members"
             },
