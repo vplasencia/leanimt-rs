@@ -10,7 +10,6 @@ export default function App() {
     <div className="flex flex-col min-h-screen px-2 text-slate-950">
       <Header />
       <div className="mb-auto">
-        <Link to="/browser">Browser Benchmarks</Link>
         <div className="flex flex-col justify-center items-center my-10">
           <div>Node.js</div>
           <TableNode />

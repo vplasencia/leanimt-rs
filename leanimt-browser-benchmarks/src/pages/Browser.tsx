@@ -7,10 +7,13 @@ import Footer from "../components/Footer"
 export default function Browser() {
   const [tableInfo, setTableInfo] = useState()
   const [samples, setSamples] = useState(100)
+  const [loading, setLoading] = useState(false)
 
   const getTableInfo = async () => {
+    setLoading(true)
     const benchmarksInfo = await generateBenchmarks(samples)
     setTableInfo(benchmarksInfo as any)
+    setLoading(false)
   }
 
   const downloadData = async () => {
@@ -61,23 +64,24 @@ export default function Browser() {
           </div>
         </div>
         <div>
-          {tableInfo ? (
-            <div className="flex justify-center items-center mb-10">
-              <button
-                className="max-w-fit rounded-md bg-indigo-700 py-2 px-5 font-semibold hover:bg-indigo-600 transition-colors duration-150 text-white"
-                onClick={downloadData}
-              >
-                Download Benchmarks
-              </button>
+          {loading ? (
+            <div className="flex justify-center items-center space-x-3">
+              <div className="loader"></div>
+              <div>Generating benchmarks</div>
             </div>
-          ) : (
-            <></>
-          )}
-        </div>
-        <div>
-          {tableInfo ? (
-            <div className="flex justify-center items-center my-5">
-              <Table data={tableInfo} />
+          ) : tableInfo ? (
+            <div>
+              <div className="flex justify-center items-center mb-10">
+                <button
+                  className="max-w-fit rounded-md bg-indigo-700 py-2 px-5 font-semibold hover:bg-indigo-600 transition-colors duration-150 text-white"
+                  onClick={downloadData}
+                >
+                  Download Benchmarks
+                </button>
+              </div>
+              <div className="flex justify-center items-center my-5">
+                <Table data={tableInfo} />
+              </div>
             </div>
           ) : (
             <></>
