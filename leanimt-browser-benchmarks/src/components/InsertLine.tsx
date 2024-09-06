@@ -20,7 +20,7 @@ export default function InsertLineChart() {
           chart: {
             id: "line-insert"
           },
-          colors: ["#0ea5e9", "#a855f7"],
+          colors: ["#3b82f6", "#a855f7"],
           xaxis: {
             categories: Insert[0].xaxis,
             title: {
