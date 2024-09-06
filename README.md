@@ -1,6 +1,6 @@
 # JS x Rust x WASM
 
-The goal of this project is to benchmark the [LeanIMT JavaScript library](https://github.com/privacy-scaling-explorations/zk-kit/tree/main/packages/lean-imt) and the [Rust implementation compiled to WASM](./leanimt-poseidon-rs/) in both Node.js and browser environments. The purpose is to determine whether this data structure is more suitable for use in the Semaphore protocol and other projects as a JS package or a WASM file. 
+The goal of this project is to benchmark the [LeanIMT JavaScript library](https://github.com/privacy-scaling-explorations/zk-kit/tree/main/packages/lean-imt) and the [Rust implementation compiled to WASM](./leanimt-poseidon-rs/) in both Node.js and browser environments. The purpose is to determine whether this data structure is more suitable for use in the Semaphore protocol and other projects as a JS package or a WASM file.
 
 The LeanIMT is the data structure used in [Semaphore v4](https://docs.semaphore.pse.dev/).
 
@@ -84,7 +84,7 @@ Browser: Google Chrome Version 128.0.6613.120 (Official Build) (arm64)
 
 For a few members in the tree the LeanIMT JS library used to be faster but as the number of members in the tree increased, the WASM library became faster.
 
-In terms of file size, the JS library (equivalent to the [`@semaphore-protocol/group`](https://www.npmjs.com/package/@semaphore-protocol/group) package) is smaller with approximately [`15 kb`](https://bundlephobia.com/package/@semaphore-protocol/group@4.0.3) while the WASM file is significantly larger, around `1.6 mb`. 
+In terms of file size, the JS library (equivalent to the [`@semaphore-protocol/group`](https://www.npmjs.com/package/@semaphore-protocol/group) package) is smaller with approximately [`15 kb`](https://bundlephobia.com/package/@semaphore-protocol/group@4.0.3) while the WASM file is significantly larger, around `1.6 mb`.
 
 Compiling Rust code into WASM can be highly beneficial for Node.js (backend) projects that require intensive computations, such as cryptographic operations and handling complex data structures with large amounts of data.
 
@@ -94,7 +94,6 @@ Since errors are harder to detect when using WASM files, it's best to use Rust c
 
 - Optimize the LeanIMT implementation in Rust and create a crate and move the code to [zk-kit](https://github.com/privacy-scaling-explorations/zk-kit.rust).
 
-- Optimize WASM size [[1]](https://rustwasm.github.io/docs/book/game-of-life/hello-world.html#wasm-game-of-lifesrclibrs). 
+- Optimize WASM size [[1]](https://rustwasm.github.io/docs/book/game-of-life/hello-world.html#wasm-game-of-lifesrclibrs).
 
 - Improve the [App UI](https://leanimt-benchmarks.vercel.app/) to make it easier for people to upload their own generated data allowing them to view charts with their data and analyze the results.
-
