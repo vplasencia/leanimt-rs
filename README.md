@@ -1,4 +1,4 @@
-# LeanIMT in Rust
+# JS x Rust x WASM
 
 The goal of this project is to benchmark the LeanIMT JS library and the Rust implementation compiled to WASM in both Node.js and browser environments. The objective is to determine whether this data structure is more suitable for use in the Semaphore protocol and other projects as a JS package or a WASM file. 
 
