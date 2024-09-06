@@ -1,4 +1,3 @@
-import { Link } from "react-router-dom"
 import TableNode from "./components/TableNode"
 import TableBrowser from "./components/TableBrowser"
 import InsertLineChart from "./components/InsertLine"
