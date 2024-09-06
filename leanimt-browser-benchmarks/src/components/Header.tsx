@@ -15,10 +15,6 @@ export default function Header() {
           Run Browser Benchmarks
         </Link>
         <div className="text-indigo-500 text-xl">&bull;</div>
-        <Link to="/about" className="text-indigo-500 hover:underline">
-          About
-        </Link>
-        <div className="text-indigo-500 text-xl">&bull;</div>
         <ViewSourceCode />
       </div>
     </header>
