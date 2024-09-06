@@ -6,6 +6,7 @@ export default function InsertLineChart() {
   return (
     <div className="flex flex-col justify-center items-center my-10">
       <LineChart
+        title="Insert members"
         series={[
           {
             name: "LeanIMT",
