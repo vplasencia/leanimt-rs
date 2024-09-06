@@ -2,7 +2,7 @@
 
 The goal of this project is to benchmark the LeanIMT JS library and the Rust implementation compiled to WASM in both Node.js and browser environments. The objective is to determine whether this data structure is more suitable for use in the Semaphore protocol and other projects as a JS package or a WASM file. 
 
-This research and development can serve as a reference for teams looking to optimize their JS projects by using WASM files.
+This research and development can serve as a reference for teams looking to improve the performance of their JS projects by using WASM files.
 
 The LeanIMT is the data structure used in [Semaphore v4](https://docs.semaphore.pse.dev/).
 
