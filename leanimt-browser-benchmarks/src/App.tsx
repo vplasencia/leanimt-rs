@@ -36,13 +36,13 @@ export default function App() {
           .
         </div>
         <div className="flex flex-col justify-center items-center my-10">
-          <div className="text-3xl font-medium">Node.js</div>
+          <div className="text-3xl font-medium">Node.js Benchmarks</div>
           <TableNode />
           <InsertLineChart />
           <UpdateLineChart />
         </div>
         <div className="flex flex-col justify-center items-center my-10">
-          <div className="text-3xl font-medium">Browser</div>
+          <div className="text-3xl font-medium">Browser Benchmarks</div>
           <TableBrowser />
         </div>
       </div>
