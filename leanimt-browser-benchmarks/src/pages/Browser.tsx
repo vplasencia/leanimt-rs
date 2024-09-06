@@ -57,7 +57,7 @@ export default function Browser() {
 
             <button
               onClick={getTableInfo}
-              className="w-full mt-5 rounded-md bg-indigo-700 py-3 px-5 font-semibold hover:bg-indigo-600 transition-colors duration-150 text-white"
+              className="w-full mt-5 rounded-md border-2 border-indigo-700 bg-indigo-700 py-3 px-5 font-semibold hover:bg-indigo-600 transition-colors duration-150 text-white"
             >
               Generate Benchmarks
             </button>
@@ -73,7 +73,7 @@ export default function Browser() {
             <div>
               <div className="flex justify-center items-center mb-10">
                 <button
-                  className="max-w-fit rounded-md bg-indigo-700 py-3 px-5 font-semibold hover:bg-indigo-600 transition-colors duration-150 text-white"
+                  className="max-w-fit rounded-md border-2 border-indigo-700 text-indigo-700 py-3 px-5 font-semibold"
                   onClick={downloadData}
                 >
                   Download Benchmarks
