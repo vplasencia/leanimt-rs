@@ -2,7 +2,7 @@ import { Bench, Task } from "tinybench"
 import { LeanIMT, LeanIMTMerkleProof } from "@zk-kit/lean-imt"
 import { poseidon2 } from "poseidon-lite"
 
-import * as wasm from "../../leanimt-poseidon-rs/pkg/leanimt_poseidon_rs"
+import * as wasm from "../wasm/pkg/leanimt_poseidon_rs"
 
 import { saveInfoJSON } from "./utils/save-info"
 
