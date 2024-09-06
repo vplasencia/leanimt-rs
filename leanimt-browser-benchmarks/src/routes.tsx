@@ -9,7 +9,7 @@ export default function Routes(): JSX.Element {
       element: <App />
     },
     {
-      path: "/browser",
+      path: "browser",
       element: <Benchmarks />
     }
   ])
