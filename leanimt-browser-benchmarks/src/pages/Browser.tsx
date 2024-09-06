@@ -46,7 +46,7 @@ export default function Browser() {
                 type="number"
                 id="number-input"
                 aria-describedby="helper-text-explanation"
-                className="w-52 border border-gray-300 text-sm rounded-md focus:ring-indigo-500 focus:border-indigo-500 block p-2.5"
+                className="w-52 border-2 border-slate-300 text-sm rounded-md focus:ring-indigo-500 focus:border-indigo-500 block py-3 px-5"
                 placeholder="1234"
                 defaultValue={100}
                 min={0}
