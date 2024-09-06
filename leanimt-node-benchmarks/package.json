@@ -2,6 +2,9 @@
   "name": "leanimt-node-benchmarks",
   "packageManager": "yarn@4.2.2",
   "scripts": {
+    "run:all-functions": "yarn ts-node src/main.ts",
+    "run:insert-function": "yarn ts-node src/insert-function.ts",
+    "run:update-function": "yarn ts-node src/update-function.ts",
     "prettier": "prettier -c .",
     "prettier:write": "prettier -w ."
   },
