@@ -12,7 +12,7 @@ export default function Header() {
       </Link>
       <div className="flex justify-center items-center space-x-3">
         <Link to="/browser" className="text-indigo-500 hover:underline">
-          Browser Benchmarks
+          Run Browser Benchmarks
         </Link>
         <div className="text-indigo-500 text-xl">&bull;</div>
         <Link to="/about" className="text-indigo-500 hover:underline">
