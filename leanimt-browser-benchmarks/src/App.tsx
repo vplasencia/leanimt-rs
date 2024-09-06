@@ -11,14 +11,14 @@ export default function App() {
       <Header />
       <div className="mb-auto">
         <div className="flex flex-col justify-center items-center my-10">
-          <div>Node.js</div>
+          <div className="text-3xl font-medium">Node.js</div>
           <TableNode />
+          <InsertLineChart />
         </div>
         <div className="flex flex-col justify-center items-center my-10">
-          <div>Browser</div>
+          <div className="text-3xl font-medium">Browser</div>
           <TableBrowser />
         </div>
-        <InsertLineChart />
       </div>
       <Footer />
     </div>
