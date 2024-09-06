@@ -4,6 +4,8 @@ import { poseidon2 } from "poseidon-lite"
 
 import * as wasm from "../../leanimt-poseidon-rs/pkg/leanimt_poseidon_rs"
 
+import { saveInfoJSON } from "./utils/save-info"
+
 const generateTable = (task: Task) => {
   if (task && task.name && task.result) {
     return {
@@ -224,6 +226,9 @@ async function main() {
   console.table(table)
 
   // console.log(bench.results)
+
+  const filePath = "./data/functions-node.json"
+  saveInfoJSON(table, filePath)
 }
 
 main()

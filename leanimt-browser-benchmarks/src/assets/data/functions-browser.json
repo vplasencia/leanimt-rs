@@ -1,72 +1,72 @@
 [
   {
     "Function": "LeanIMT - Insert",
-    "ops/sec": "1,418",
-    "Average Time (ms)": "0.70500",
-    "Samples": 20,
+    "ops/sec": "2,132",
+    "Average Time (ms)": "0.46900",
+    "Samples": 100,
     "Relative to LeanIMT": ""
   },
   {
     "Function": "LeanIMTWasm - Insert",
-    "ops/sec": "1,550",
-    "Average Time (ms)": "0.64500",
-    "Samples": 20,
-    "Relative to LeanIMT": "1.09 x faster"
+    "ops/sec": "1,078",
+    "Average Time (ms)": "0.92700",
+    "Samples": 100,
+    "Relative to LeanIMT": "1.98 x slower"
   },
   {
     "Function": "LeanIMT - InsertMany",
-    "ops/sec": "591",
-    "Average Time (ms)": "1.69000",
-    "Samples": 20,
+    "ops/sec": "155",
+    "Average Time (ms)": "6.43100",
+    "Samples": 100,
     "Relative to LeanIMT": ""
   },
   {
     "Function": "LeanIMTWasm - InsertMany",
-    "ops/sec": "558",
-    "Average Time (ms)": "1.79000",
-    "Samples": 20,
-    "Relative to LeanIMT": "1.06 x slower"
+    "ops/sec": "170",
+    "Average Time (ms)": "5.84900",
+    "Samples": 100,
+    "Relative to LeanIMT": "1.10 x faster"
   },
   {
     "Function": "LeanIMT - Update",
-    "ops/sec": "2,105",
-    "Average Time (ms)": "0.47500",
-    "Samples": 20,
+    "ops/sec": "1,331",
+    "Average Time (ms)": "0.75100",
+    "Samples": 100,
     "Relative to LeanIMT": ""
   },
   {
     "Function": "LeanIMTWasm - Update",
-    "ops/sec": "1,769",
-    "Average Time (ms)": "0.56500",
-    "Samples": 20,
-    "Relative to LeanIMT": "1.19 x slower"
+    "ops/sec": "1,490",
+    "Average Time (ms)": "0.67100",
+    "Samples": 100,
+    "Relative to LeanIMT": "1.12 x faster"
   },
   {
     "Function": "LeanIMT - GenerateProof",
-    "ops/sec": "NaN",
-    "Average Time (ms)": "0.00000",
-    "Samples": 20,
+    "ops/sec": "999,999",
+    "Average Time (ms)": "0.00100",
+    "Samples": 100,
     "Relative to LeanIMT": ""
   },
   {
     "Function": "LeanIMTWasm - GenerateProof",
-    "ops/sec": "99,999",
-    "Average Time (ms)": "0.01000",
-    "Samples": 20,
-    "Relative to LeanIMT": "Infinity x slower"
+    "ops/sec": "124,999",
+    "Average Time (ms)": "0.00800",
+    "Samples": 100,
+    "Relative to LeanIMT": "8.00 x slower"
   },
   {
     "Function": "LeanIMT - VerifyProof",
-    "ops/sec": "2,197",
-    "Average Time (ms)": "0.45500",
-    "Samples": 20,
+    "ops/sec": "1,402",
+    "Average Time (ms)": "0.71300",
+    "Samples": 100,
     "Relative to LeanIMT": ""
   },
   {
     "Function": "LeanIMTWasm - VerifyProof",
-    "ops/sec": "1,724",
-    "Average Time (ms)": "0.58000",
-    "Samples": 20,
-    "Relative to LeanIMT": "1.27 x slower"
+    "ops/sec": "1,499",
+    "Average Time (ms)": "0.66700",
+    "Samples": 100,
+    "Relative to LeanIMT": "1.07 x faster"
   }
 ]
