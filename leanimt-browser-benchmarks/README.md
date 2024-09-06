@@ -4,7 +4,11 @@ This folder contains a Vite + React project for generating benchmarks for the Le
 
 Live App: https://leanimt-benchmarks.vercel.app/
 
-### Run the project
+## Run the benchmarks directly in your browser
+
+Go to App page called `browser`: https://leanimt-benchmarks.vercel.app/browser
+
+## Run the project
 
 ```bash
 yarn dev
