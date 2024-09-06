@@ -24,14 +24,14 @@ export default function App() {
           .
         </div>
         <div className="flex justify-center items-center space-x-1">
-          To know more about this project, visit the project
+          To know more about this project, please refer to the
           <a
             className="flex space-x-1 text-indigo-500 hover:underline ml-1"
             href="https://github.com/vplasencia/leanimt-rs?tab=readme-ov-file#js-x-rust-x-wasm"
             target="_blank"
             rel="noreferrer noopener nofollow"
           >
-            <span>Readme file</span>
+            <span>README file</span>
           </a>
           .
         </div>
