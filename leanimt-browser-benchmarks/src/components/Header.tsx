@@ -10,10 +10,12 @@ export default function Header() {
       >
         JS x Rust x WASM
       </Link>
-      <div className="flex space-x-3">
+      <div className="flex justify-center items-center space-x-3">
         <Link to="/about" className="text-indigo-500 hover:underline">
           About
         </Link>
+        <div className="text-indigo-500 text-xl"><div>
+        &bull;</div></div>
         <ViewSourceCode />
       </div>
     </header>
