@@ -22,7 +22,7 @@ const generateTable = (task: Task) => {
 }
 
 async function main() {
-  const samples = 100
+  const samples = 10000
 
   const bench = new Bench({ time: 0, iterations: samples })
 
