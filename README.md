@@ -84,7 +84,7 @@ Browser: Google Chrome Version 128.0.6613.120 (Official Build) (arm64)
 
 For a few members in the tree the LeanIMT JS library used to be faster but as the number of members in the tree increased, the WASM library became faster.
 
-In terms of file size, the JS library (equivalent to the [`@semaphore-protocol/group`](https://www.npmjs.com/package/@semaphore-protocol/group) package) is smaller with approximately `52.7 kb` while the WASM file is significantly larger, around `1.6 mb`. 
+In terms of file size, the JS library (equivalent to the [`@semaphore-protocol/group`](https://www.npmjs.com/package/@semaphore-protocol/group) package) is smaller with approximately [`15 kb`](https://bundlephobia.com/package/@semaphore-protocol/group@4.0.3) while the WASM file is significantly larger, around `1.6 mb`. 
 
 Compiling Rust code into WASM can be highly beneficial for Node.js (backend) projects that require intensive computations, such as cryptographic operations and handling complex data structures with large amounts of data.
 
