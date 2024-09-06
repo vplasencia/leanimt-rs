@@ -88,7 +88,7 @@ In terms of file size, the JS library (equivalent to the [`@semaphore-protocol/g
 
 Compiling Rust code into WASM can be highly beneficial for Node.js (backend) projects that require intensive computations, such as cryptographic operations and handling complex data structures with large amounts of data.
 
-Since errors are harder to detect when using WASM files, it's best to use Rust code compiled into WASM when the code is stable and unlikely to change frequently.
+Since errors are harder to detect when using WASM files, it's best to use Rust code compiled to WASM when the code is stable and unlikely to change frequently.
 
 ## Future work
 
