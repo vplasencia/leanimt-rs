@@ -31,7 +31,7 @@ impl LeanIMT {
     }
 
     pub fn root(&mut self) -> Option<LeanIMTNode> {
-        self.nodes[self.depth()].first().cloned()
+        self.nodes.last().and_then(|level| level.first()).cloned()
     }
 
     pub fn depth(&self) -> usize {
