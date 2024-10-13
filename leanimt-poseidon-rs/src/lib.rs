@@ -62,14 +62,14 @@ impl LeanIMTPoseidon {
     pub fn insert(&mut self, leaf: LeanIMTNode) {
         match self.leanimt.insert(leaf) {
             Ok(()) => (),
-            Err(_) => panic!("Failed to insert a the leaf"),
+            Err(_) => panic!("Failed to insert the leaf"),
         }
     }
 
     pub fn insert_many(&mut self, leaves: Vec<LeanIMTNode>) {
         match self.leanimt.insert_many(leaves) {
             Ok(()) => (),
-            Err(_) => panic!("Failed to insert a the leaf"),
+            Err(_) => panic!("Failed to insert the leaves"),
         }
     }
 
