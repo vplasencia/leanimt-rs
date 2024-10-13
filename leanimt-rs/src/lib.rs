@@ -80,11 +80,7 @@ impl LeanIMT {
             index >>= 1;
         }
 
-        if self.nodes[new_depth].is_empty() {
-            self.nodes[new_depth].push(node);
-        } else {
-            self.nodes[new_depth][0] = node;
-        }
+        self.nodes[new_depth] = vec![node];
 
         Ok(())
     }
