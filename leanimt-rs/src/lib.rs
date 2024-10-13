@@ -55,14 +55,17 @@ impl LeanIMT {
     }
 
     pub fn insert(&mut self, leaf: LeanIMTNode) -> Result<(), &'static str> {
-        if self.depth() < ((self.size() + 1) as f64).log2().ceil() as usize {
+        let new_size = self.size() + 1;
+        let new_depth = new_size.next_power_of_two().trailing_zeros() as usize;
+
+        if self.depth() < new_depth {
             self.nodes.push(Vec::new());
         }
 
         let mut node = leaf;
         let mut index = self.size();
 
-        for level in 0..self.depth() {
+        for level in 0..new_depth {
             if self.nodes[level].len() <= index {
                 self.nodes[level].push(node.clone());
             } else {
@@ -77,12 +80,10 @@ impl LeanIMT {
             index >>= 1;
         }
 
-        let depth = self.depth();
-
-        if self.nodes[depth].is_empty() {
-            self.nodes[depth].push(node);
+        if self.nodes[new_depth].is_empty() {
+            self.nodes[new_depth].push(node);
         } else {
-            self.nodes[depth][0] = node;
+            self.nodes[new_depth][0] = node;
         }
 
         Ok(())
@@ -96,7 +97,9 @@ impl LeanIMT {
         let start_index = self.size() >> 1;
         self.nodes[0].extend(leaves);
 
-        let number_of_new_levels = ((self.size() as f64).log2().ceil() as usize) - self.depth();
+        let new_size = self.size();
+        let new_depth = new_size.next_power_of_two().trailing_zeros() as usize;
+        let number_of_new_levels = new_depth - self.depth();
 
         for _ in 0..number_of_new_levels {
             self.nodes.push(Vec::new());
