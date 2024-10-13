@@ -81,13 +81,15 @@ impl LeanIMTPoseidon {
     }
 
     pub fn generate_proof(&mut self, index: usize) -> Vec<String> {
-        let proof = self.leanimt.generate_proof(index);
-        vec![
-            proof.root,
-            proof.leaf,
-            proof.index.to_string(),
-            proof.siblings.join(","),
-        ]
+        match self.leanimt.generate_proof(index) {
+            Ok(proof) => vec![
+                proof.root,
+                proof.leaf,
+                proof.index.to_string(),
+                proof.siblings.join(","),
+            ],
+            Err(_) => panic!("Failed to generate the proof"),
+        }
     }
 
     pub fn verify_proof(proof: Vec<String>) -> bool {
