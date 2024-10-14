@@ -102,16 +102,19 @@ impl LeanIMT {
         }
 
         for level in 0..self.depth() {
-            let number_of_nodes = ((self.nodes[level].len() / 2) as f64).ceil() as usize;
+            let number_of_nodes = (self.nodes[level].len() as f64 / 2 as f64).ceil() as usize;
 
             for index in start_index..number_of_nodes {
                 let left_node = self.nodes[level][index * 2].clone();
-                let right_node = self.nodes[level].get(index * 2 + 1).cloned();
 
-                let parent_node = match right_node {
-                    Some(right) => (self.hash)(vec![left_node, right]),
-                    None => left_node,
-                };
+                let parent_node;
+
+                if index * 2 + 1 < self.nodes[level].len() {
+                    let right_node = self.nodes[level][index * 2 + 1].clone();
+                    parent_node = (self.hash)(vec![left_node, right_node]);
+                } else {
+                    parent_node = left_node;
+                }
 
                 if self.nodes[level + 1].len() <= index {
                     self.nodes[level + 1].push(parent_node);
@@ -119,7 +122,7 @@ impl LeanIMT {
                     self.nodes[level + 1][index] = parent_node;
                 }
             }
-            start_index = start_index >> 1;
+            start_index >>= 1;
         }
 
         Ok(())
@@ -259,7 +262,10 @@ mod tests {
         assert_eq!(leanimt.depth(), 2);
         assert_eq!(
             leanimt.root().unwrap(),
-            hash_function(vec![hash_function(vec!["1".to_string(), "2".to_string()]), hash_function(vec!["3".to_string(), "4".to_string()])])
+            hash_function(vec![
+                hash_function(vec!["1".to_string(), "2".to_string()]),
+                hash_function(vec!["3".to_string(), "4".to_string()])
+            ])
         );
     }
 
@@ -274,6 +280,26 @@ mod tests {
                 "4".to_string(),
             ])
             .unwrap();
+        assert_eq!(leanimt.size(), 4);
+        assert_eq!(leanimt.depth(), 2);
+        assert_eq!(
+            leanimt.root().unwrap(),
+            hash_function(vec![
+                hash_function(vec!["1".to_string(), "2".to_string()]),
+                hash_function(vec!["3".to_string(), "4".to_string()])
+            ])
+        );
+    }
+
+    #[test]
+    fn test_insert_many_leaves_tree_with_leaves() {
+        let mut leanimt: LeanIMT = LeanIMT::new(
+            hash_function,
+            vec!["1".to_string(), "2".to_string(), "3".to_string()],
+        )
+        .unwrap();
+        leanimt.insert_many(vec!["4".to_string()]).unwrap();
+
         assert_eq!(leanimt.size(), 4);
         assert_eq!(leanimt.depth(), 2);
         assert_eq!(
