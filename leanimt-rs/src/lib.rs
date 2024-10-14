@@ -223,6 +223,22 @@ mod tests {
     }
 
     #[test]
+    fn test_index_of() {
+        let leaves = vec!["1".to_string(), "2".to_string(), "3".to_string()];
+        let leanimt: LeanIMT = LeanIMT::new(hash_function, leaves).unwrap();
+        let index = leanimt.index_of(&"2".to_string());
+        assert_eq!(index, Some(1));
+    }
+
+    #[test]
+    fn test_has() {
+        let leaves = vec!["1".to_string(), "2".to_string(), "3".to_string()];
+        let leanimt: LeanIMT = LeanIMT::new(hash_function, leaves).unwrap();
+        let index = leanimt.has(&"2".to_string());
+        assert_eq!(index, true);
+    }
+
+    #[test]
     fn test_insert_single_leaf() {
         let mut leanimt: LeanIMT = LeanIMT::new(hash_function, vec![]).unwrap();
         leanimt.insert("1".to_string()).unwrap();
@@ -264,6 +280,14 @@ mod tests {
                 hash_function(vec!["3".to_string(), "4".to_string()])
             ])
         );
+    }
+
+    #[test]
+    fn test_insert_many_throw_empty_leaves() {
+        let mut leanimt: LeanIMT = LeanIMT::new(hash_function, vec![]).unwrap();
+        let result = leanimt.insert_many(vec![]);
+
+        assert!(matches!(result, Err("There are no leaves to add")));
     }
 
     #[test]
@@ -316,6 +340,23 @@ mod tests {
             proof.siblings,
             vec!["4", &hash_function(vec!["1".to_string(), "2".to_string()])]
         );
+    }
+
+    #[test]
+    fn test_generate_proof_throw_incorrect_index() {
+        let leanimt: LeanIMT = LeanIMT::new(
+            hash_function,
+            vec![
+                "1".to_string(),
+                "2".to_string(),
+                "3".to_string(),
+                "4".to_string(),
+            ],
+        )
+        .unwrap();
+        let proof = leanimt.generate_proof(10);
+
+        assert!(matches!(proof, Err("The leaf does not exist in this tree")));
     }
 
     #[test]
