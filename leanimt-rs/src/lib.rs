@@ -102,19 +102,17 @@ impl LeanIMT {
         }
 
         for level in 0..self.depth() {
-            let number_of_nodes = (self.nodes[level].len() as f64 / 2 as f64).ceil() as usize;
+            let number_of_nodes = (self.nodes[level].len() as f64 / 2_f64).ceil() as usize;
 
             for index in start_index..number_of_nodes {
                 let left_node = self.nodes[level][index * 2].clone();
 
-                let parent_node;
-
-                if index * 2 + 1 < self.nodes[level].len() {
+                let parent_node = if index * 2 + 1 < self.nodes[level].len() {
                     let right_node = self.nodes[level][index * 2 + 1].clone();
-                    parent_node = (self.hash)(vec![left_node, right_node]);
+                    (self.hash)(vec![left_node, right_node])
                 } else {
-                    parent_node = left_node;
-                }
+                    left_node
+                };
 
                 if self.nodes[level + 1].len() <= index {
                     self.nodes[level + 1].push(parent_node);
