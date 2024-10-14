@@ -90,7 +90,7 @@ impl LeanIMT {
             return Err("There are no leaves to add");
         }
 
-        let start_index = self.size() >> 1;
+        let mut start_index = self.size() >> 1;
         self.nodes[0].extend(leaves);
 
         let new_size = self.size();
@@ -102,7 +102,7 @@ impl LeanIMT {
         }
 
         for level in 0..self.depth() {
-            let number_of_nodes = (self.nodes[level].len() + 1) / 2;
+            let number_of_nodes = ((self.nodes[level].len() / 2) as f64).ceil() as usize;
 
             for index in start_index..number_of_nodes {
                 let left_node = self.nodes[level][index * 2].clone();
@@ -119,6 +119,7 @@ impl LeanIMT {
                     self.nodes[level + 1][index] = parent_node;
                 }
             }
+            start_index = start_index >> 1;
         }
 
         Ok(())
@@ -252,16 +253,18 @@ mod tests {
         let mut leanimt: LeanIMT = LeanIMT::new(hash_function, vec![]).unwrap();
         leanimt.insert("1".to_string()).unwrap();
         leanimt.insert("2".to_string()).unwrap();
-        assert_eq!(leanimt.size(), 2);
-        assert_eq!(leanimt.depth(), 1);
+        leanimt.insert("3".to_string()).unwrap();
+        leanimt.insert("4".to_string()).unwrap();
+        assert_eq!(leanimt.size(), 4);
+        assert_eq!(leanimt.depth(), 2);
         assert_eq!(
             leanimt.root().unwrap(),
-            hash_function(vec!["1".to_string(), "2".to_string()])
+            hash_function(vec![hash_function(vec!["1".to_string(), "2".to_string()]), hash_function(vec!["3".to_string(), "4".to_string()])])
         );
     }
 
     #[test]
-    fn test_insert_many_leaves() {
+    fn test_insert_many_leaves_empty_tree() {
         let mut leanimt: LeanIMT = LeanIMT::new(hash_function, vec![]).unwrap();
         leanimt
             .insert_many(vec![
