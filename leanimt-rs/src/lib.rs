@@ -31,7 +31,7 @@ impl LeanIMT {
     }
 
     pub fn root(&mut self) -> Option<LeanIMTNode> {
-        self.nodes[self.depth()].first().cloned()
+        self.nodes.last().and_then(|level| level.first()).cloned()
     }
 
     pub fn depth(&self) -> usize {
@@ -55,14 +55,17 @@ impl LeanIMT {
     }
 
     pub fn insert(&mut self, leaf: LeanIMTNode) -> Result<(), &'static str> {
-        if self.depth() < ((self.size() + 1) as f64).log2().ceil() as usize {
+        let new_size = self.size() + 1;
+        let new_depth = new_size.next_power_of_two().trailing_zeros() as usize;
+
+        if self.depth() < new_depth {
             self.nodes.push(Vec::new());
         }
 
         let mut node = leaf;
         let mut index = self.size();
 
-        for level in 0..self.depth() {
+        for level in 0..new_depth {
             if self.nodes[level].len() <= index {
                 self.nodes[level].push(node.clone());
             } else {
@@ -77,41 +80,38 @@ impl LeanIMT {
             index >>= 1;
         }
 
-        let depth = self.depth();
-
-        if self.nodes[depth].is_empty() {
-            self.nodes[depth].push(node);
-        } else {
-            self.nodes[depth][0] = node;
-        }
+        self.nodes[new_depth] = vec![node];
 
         Ok(())
     }
 
     pub fn insert_many(&mut self, leaves: Vec<LeanIMTNode>) -> Result<(), &'static str> {
         if leaves.is_empty() {
-            panic!("There are no leaves to add");
+            return Err("There are no leaves to add");
         }
 
-        let start_index = self.size() >> 1;
+        let mut start_index = self.size() >> 1;
         self.nodes[0].extend(leaves);
 
-        let number_of_new_levels = ((self.size() as f64).log2().ceil() as usize) - self.depth();
+        let new_size = self.size();
+        let new_depth = new_size.next_power_of_two().trailing_zeros() as usize;
+        let number_of_new_levels = new_depth - self.depth();
 
         for _ in 0..number_of_new_levels {
             self.nodes.push(Vec::new());
         }
 
         for level in 0..self.depth() {
-            let number_of_nodes = (self.nodes[level].len() + 1) / 2;
+            let number_of_nodes = (self.nodes[level].len() as f64 / 2_f64).ceil() as usize;
 
             for index in start_index..number_of_nodes {
                 let left_node = self.nodes[level][index * 2].clone();
-                let right_node = self.nodes[level].get(index * 2 + 1).cloned();
 
-                let parent_node = match right_node {
-                    Some(right) => (self.hash)(vec![left_node, right]),
-                    None => left_node,
+                let parent_node = if index * 2 + 1 < self.nodes[level].len() {
+                    let right_node = self.nodes[level][index * 2 + 1].clone();
+                    (self.hash)(vec![left_node, right_node])
+                } else {
+                    left_node
                 };
 
                 if self.nodes[level + 1].len() <= index {
@@ -120,6 +120,7 @@ impl LeanIMT {
                     self.nodes[level + 1][index] = parent_node;
                 }
             }
+            start_index >>= 1;
         }
 
         Ok(())
@@ -148,9 +149,9 @@ impl LeanIMT {
         Ok(())
     }
 
-    pub fn generate_proof(&self, mut index: usize) -> LeanIMTMerkleProof {
+    pub fn generate_proof(&self, mut index: usize) -> Result<LeanIMTMerkleProof, &'static str> {
         if index >= self.size() {
-            panic!("The leaf at index '{}' does not exist in this tree", index);
+            return Err("The leaf does not exist in this tree");
         }
 
         let leaf = self.leaves()[index].clone();
@@ -173,12 +174,12 @@ impl LeanIMT {
             .rev()
             .fold(0, |acc, &is_right| (acc << 1) | is_right as usize);
 
-        LeanIMTMerkleProof {
+        Ok(LeanIMTMerkleProof {
             root: self.nodes[self.depth()][0].clone(),
             leaf,
             index: final_index,
             siblings,
-        }
+        })
     }
     pub fn verify_proof(
         proof: &LeanIMTMerkleProof,
@@ -224,6 +225,22 @@ mod tests {
     }
 
     #[test]
+    fn test_index_of() {
+        let leaves = vec!["1".to_string(), "2".to_string(), "3".to_string()];
+        let leanimt: LeanIMT = LeanIMT::new(hash_function, leaves).unwrap();
+        let index = leanimt.index_of(&"2".to_string());
+        assert_eq!(index, Some(1));
+    }
+
+    #[test]
+    fn test_has() {
+        let leaves = vec!["1".to_string(), "2".to_string(), "3".to_string()];
+        let leanimt: LeanIMT = LeanIMT::new(hash_function, leaves).unwrap();
+        let index = leanimt.has(&"2".to_string());
+        assert_eq!(index, true);
+    }
+
+    #[test]
     fn test_insert_single_leaf() {
         let mut leanimt: LeanIMT = LeanIMT::new(hash_function, vec![]).unwrap();
         leanimt.insert("1".to_string()).unwrap();
@@ -237,16 +254,21 @@ mod tests {
         let mut leanimt: LeanIMT = LeanIMT::new(hash_function, vec![]).unwrap();
         leanimt.insert("1".to_string()).unwrap();
         leanimt.insert("2".to_string()).unwrap();
-        assert_eq!(leanimt.size(), 2);
-        assert_eq!(leanimt.depth(), 1);
+        leanimt.insert("3".to_string()).unwrap();
+        leanimt.insert("4".to_string()).unwrap();
+        assert_eq!(leanimt.size(), 4);
+        assert_eq!(leanimt.depth(), 2);
         assert_eq!(
             leanimt.root().unwrap(),
-            hash_function(vec!["1".to_string(), "2".to_string()])
+            hash_function(vec![
+                hash_function(vec!["1".to_string(), "2".to_string()]),
+                hash_function(vec!["3".to_string(), "4".to_string()])
+            ])
         );
     }
 
     #[test]
-    fn test_insert_many_leaves() {
+    fn test_insert_many_leaves_empty_tree() {
         let mut leanimt: LeanIMT = LeanIMT::new(hash_function, vec![]).unwrap();
         leanimt
             .insert_many(vec![
@@ -265,6 +287,34 @@ mod tests {
                 hash_function(vec!["3".to_string(), "4".to_string()])
             ])
         );
+    }
+
+    #[test]
+    fn test_insert_many_leaves_tree_with_leaves() {
+        let mut leanimt: LeanIMT = LeanIMT::new(
+            hash_function,
+            vec!["1".to_string(), "2".to_string(), "3".to_string()],
+        )
+        .unwrap();
+        leanimt.insert_many(vec!["4".to_string()]).unwrap();
+
+        assert_eq!(leanimt.size(), 4);
+        assert_eq!(leanimt.depth(), 2);
+        assert_eq!(
+            leanimt.root().unwrap(),
+            hash_function(vec![
+                hash_function(vec!["1".to_string(), "2".to_string()]),
+                hash_function(vec!["3".to_string(), "4".to_string()])
+            ])
+        );
+    }
+
+    #[test]
+    fn test_insert_many_throw_empty_leaves() {
+        let mut leanimt: LeanIMT = LeanIMT::new(hash_function, vec![]).unwrap();
+        let result = leanimt.insert_many(vec![]);
+
+        assert!(matches!(result, Err("There are no leaves to add")));
     }
 
     #[test]
@@ -302,7 +352,7 @@ mod tests {
             ],
         )
         .unwrap();
-        let proof = leanimt.generate_proof(2);
+        let proof = leanimt.generate_proof(2).unwrap();
 
         assert_eq!(
             proof.root,
@@ -320,6 +370,23 @@ mod tests {
     }
 
     #[test]
+    fn test_generate_proof_throw_incorrect_index() {
+        let leanimt: LeanIMT = LeanIMT::new(
+            hash_function,
+            vec![
+                "1".to_string(),
+                "2".to_string(),
+                "3".to_string(),
+                "4".to_string(),
+            ],
+        )
+        .unwrap();
+        let proof = leanimt.generate_proof(10);
+
+        assert!(matches!(proof, Err("The leaf does not exist in this tree")));
+    }
+
+    #[test]
     fn test_verify_proof() {
         let leanimt: LeanIMT = LeanIMT::new(
             hash_function,
@@ -331,7 +398,7 @@ mod tests {
             ],
         )
         .unwrap();
-        let proof = leanimt.generate_proof(2); // Generate proof for the third leaf (value 3)
+        let proof = leanimt.generate_proof(2).unwrap(); // Generate proof for the third leaf (value 3)
         assert!(LeanIMT::verify_proof(&proof, hash_function).unwrap());
     }
 }
